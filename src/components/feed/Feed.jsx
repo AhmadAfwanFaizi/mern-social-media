@@ -15,7 +15,12 @@ export default function Feed({ username }) {
     const res = username
       ? await axios.get(`/posts/profile/${username}`)
       : await axios.get(`/posts/timeline/619c8a883bcd4ca3d51fd85c`);
-    setPosts(res.data);
+    setPosts(
+      res.data.sort((p1, p2) => {
+        console.log(p1, p2);
+        return new Date(p2.createdAt) - new Date(p1.createdAt);
+      })
+    );
   };
 
   useEffect(() => {
