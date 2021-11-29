@@ -17,7 +17,6 @@ export default function Feed({ username }) {
       : await axios.get(`/posts/timeline/619c8a883bcd4ca3d51fd85c`);
     setPosts(
       res.data.sort((p1, p2) => {
-        console.log(p1, p2);
         return new Date(p2.createdAt) - new Date(p1.createdAt);
       })
     );
@@ -27,10 +26,12 @@ export default function Feed({ username }) {
     fetchUser();
   }, [username, user._id]);
 
+  console.log(user);
+
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <Share />
+        {(!username || username === user.username) && <Share />}
         {posts.map((post) => (
           <Post key={post._id} post={post} />
         ))}
