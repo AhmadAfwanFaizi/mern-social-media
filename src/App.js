@@ -4,6 +4,7 @@ import { AuthContext } from "./context/AuthContext";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
+import Messenger from "./pages/messenger/Messenger";
 import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 
@@ -23,6 +24,7 @@ function App() {
           path="/profile/:username"
           element={user ? <Profile /> : <Login />}
         />
+        <Route path="/messenger" element={user ? <Messenger /> : <Login />} />
       </Routes>
     </BrowserRouter>
   );
