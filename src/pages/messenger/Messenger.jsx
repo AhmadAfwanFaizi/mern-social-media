@@ -12,10 +12,11 @@ import "./messenger.css";
 
 function Messenger() {
   const [conversation, setConversation] = useState([]);
-  const [currentChat, setcurrentChat] = useState(null);
+  const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
@@ -86,7 +87,9 @@ function Messenger() {
   useEffect(() => {
     socket.current.emit("addUser", user._id);
     socket.current.on("getUsers", (users) => {
-      console.log(users);
+      setOnlineUsers(
+        user.followings.filter((f) => users.some((u) => u.userId === f))
+      );
     });
   }, [user]);
 
@@ -114,7 +117,7 @@ function Messenger() {
               className="chatMenuInput"
             />
             {conversation.map((val, index) => (
-              <div key={index} onClick={() => setcurrentChat(val)}>
+              <div key={index} onClick={() => setCurrentChat(val)}>
                 <Conversation conversation={val} currentUser={user} />
               </div>
             ))}
@@ -152,7 +155,11 @@ function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <ChatOnline />
+            <ChatOnline
+              onlineUsers={onlineUsers}
+              currentId={user._id}
+              setCurrentChat={setCurrentChat}
+            />
           </div>
         </div>
       </div>
